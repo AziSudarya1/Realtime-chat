@@ -2,13 +2,14 @@
   "name": "realtime-chat",
   "version": "1.0.0",
   "description": "Realtime chat use webSocket",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "dev": "app.js"
+    "dev": "cross-env NODE_ENV=development nodemon ./src/app.js"
   },
   "author": "Muhamad Azi Sudarya",
   "license": "ISC",
   "dependencies": {
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
