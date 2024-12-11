@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Real-Time Chat</title>
+    <style>
+      *{
+        font-family: 'montserrat';
+      }
+      #messageList p{
+        white-space: normal;
+        word-wrap: break-word;
+      }
+    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  </head>
+
+  <body class="bg-dark text-white d-flex align-items-center justify-content-center" style="height: 100vh;">
+
+      <div class="text-center d-flex flex-column">
+        <form id="login">
+          <h5>Input your name to start chat</h5>
+          <input type="text" id="inputName" class="form-control">
+          <input type="submit" id="startMessage" class="btn btn-primary mt-4" value="Let's Join Chat!">
+        </form>
+      </div>
+
+      <div class="container w-75 my-5" id="chat">
+        <h1>MazChat</h1>
+         <form id="chatForm" class="d-flex flex-column gap-3">
+           <div id="messageList" class="border rounded-top rounded-bottom overflow-auto w-auto" style="height : 500px"></div>
+           <div class="d-flex justify-content-center align-items-center">
+             <input id="inputMessage" type="text" class="col-9 col-md-11 rounded">
+             <button id="sendMessage" class="border-0 bg-dark pt-2"><i class="material-icons" style="color: wheat;">send</i></button>
+           </div>
+          </div>
+        </div>
+      </form>
+      
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+      //get login button
+      const inputNameContainer = document.querySelector('#login');
+      console.log(inputNameContainer);
+
+      //get container chat
+      const chatContainer = document.querySelector('#chat');
+      chatContainer.style.display = 'none';
+      
+      const idUser = document.querySelector('#inputName');
+      
+      // if button join chat on click
+      const sendName = document.querySelector('#startMessage');
+      sendName.addEventListener('click', (e) =>{
+        e.preventDefault(); // unfollow redirect and send form
+        chatContainer.style.display ='block';
+        inputNameContainer.style.display ='none';
+        const id = idUser.value;
+      }); 
+
+
+      const socket = io();
+
+      socket.on('connect', () => {
+        console.log("Connected to server with id:", socket.id); 
+      });
+    
+      //if button send message on click
+      const chatForm = document.querySelector('#chatForm');
+      const sendMessage = document.querySelector('#sendMessage');
+      const inputMesssage = document.querySelector('#inputMessage');
+      const messageList = document.querySelector('#messageList');
+      
+      //send message to server
+      chatForm.addEventListener('submit', (e) =>{
+        e.preventDefault();
+        if (inputMesssage.value) {
+          //broadcast
+          const data = {
+            id : idUser.value,
+            message : inputMesssage.value
+          }
+
+          if(!data.id) {
+            data.id = socket.id;
+          }
+          
+          socket.emit('message', data);
+
+          const createElemet = document.createElement('p');
+          createElemet.textContent = inputMesssage.value;
+          createElemet.style.fontSize = '20px';
+          createElemet.style.textAlign = 'right';
+          createElemet.style.borderRadius = '34px';
+          createElemet.style.paddingRight = '12px';
+          createElemet.style.marginTop = '12px';
+          messageList.appendChild(createElemet);
+          inputMesssage.value = ''; //clear inputMessage
+
+        }
+      });
+
+      //broadcast 
+      socket.on('message', (id, message) => {
+        console.log('message', id, message);
+
+        //view on second user 
+        const broadcastElement = document.createElement('p');
+        broadcastElement.style.fontSize = '20px';
+        broadcastElement.style.textAlign = 'left';
+        broadcastElement.style.paddingLeft = '12px'
+        broadcastElement.style.width = 'auto';
+        broadcastElement.innerHTML = `from: (${id})` + '<br>' + message ;
+        messageList.appendChild(broadcastElement);
+      });
+
+
+      
+      
+      
+    </script>
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

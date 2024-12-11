@@ -1,0 +1,19 @@
+{
+  "name": "realtime-chat",
+  "version": "1.0.0",
+  "description": "Realtime chat use webSocket",
+  "main": "app.js",
+  "scripts": {
+    "dev": "app.js"
+  },
+  "author": "Muhamad Azi Sudarya",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "nodemon": "^3.1.7",
+    "path": "^0.12.7",
+    "socket.io": "^4.8.1"
+  }
+}
