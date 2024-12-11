@@ -7,6 +7,7 @@ const http = require('http');
 const port = process.env.PORT || 4000;
 
 
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
@@ -14,9 +15,9 @@ const io = new Server(server);
 
 
 //middleware
-app.use(express.static(path.join(__dirname, './src/views')));
+app.use(express.static(path.join(__dirname, '../src/views')));
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, './src/views'));
+app.set('views', path.join(__dirname, '../src/views'));
 
 
 //default route
