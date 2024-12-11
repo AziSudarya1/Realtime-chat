@@ -10,12 +10,8 @@ const port = process.env.PORT || 4000;
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "*",  
-    methods: ["GET", "POST"]
-  }
-});
+const io = new Server(server);
+
 
 
 //middleware
