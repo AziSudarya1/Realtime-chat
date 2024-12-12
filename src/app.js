@@ -4,7 +4,7 @@ const path = require('path');
 const { Server } = require('socket.io');
 const { join } = require('node:path');
 const http = require('http');
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 80;
 
 
 
